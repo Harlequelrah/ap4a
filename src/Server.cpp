@@ -29,7 +29,7 @@ void Server::consoleWriter(const std::string &type, double value)
 
 void Server::fileWrite(const std::string &type, double value)
 {
-    std::ofstream fichier(type + ".txt");
+    std::ofstream fichier("logs/" + type + ".txt");
     fichier << type << " : " << value << std::endl;
     fichier.close();
 }
