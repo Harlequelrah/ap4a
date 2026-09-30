@@ -3,15 +3,13 @@
 
 Server::Server()
 {
-    std::cout << "Serveur créé" << std::endl;
 }
 
 Server::Server(const Server &other)
 {
-    std::cout << "Constructeur de copie" << std::endl;
 }
 
-Server &Server::operator=(Server &other)
+Server &Server::operator=(const Server &other)
 {
     std::cout << "Operateur =" << std::endl;
     if (this != &other)
@@ -22,5 +20,22 @@ Server &Server::operator=(Server &other)
 
 Server::~Server()
 {
-    std::cout << "Destructeur" << std::endl;
+}
+
+void Server::consoleWriter(const std::string &type, double value)
+{
+    std::cout << type << " : " << value << std::endl;
+}
+
+void Server::fileWrite(const std::string &type, double value)
+{
+    std::ofstream fichier(type + ".txt");
+    fichier << type << " : " << value << std::endl;
+    fichier.close();
+}
+
+std::ostream &operator<<(std::ostream &os, const Server &server)
+{
+    os << "Serveur";
+    return os;
 }

@@ -1,6 +1,8 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
-
+#include <string>
+#include <fstream>
+#include <iostream>
 class Server
 {
 public:
@@ -11,11 +13,16 @@ public:
     Server(const Server &other);
 
     // affectation
-    Server &operator=(Server &other);
+    Server &operator=(const Server &other);
 
     // destructeur
     ~Server();
-    void consoleWriter();
+
+    // méthodes
+    void consoleWriter(const std::string &type, double value);
+    void fileWrite(const std::string &type, double value);
+
+    friend std::ostream &operator<<(std::ostream& os ,const Server& server);
 };
 
 #endif

@@ -8,6 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(project
     main.cpp
     src/Server.cpp
+    src/Sensor.cpp
+    src/Scheduler.cpp
 )
 
 target_include_directories(project

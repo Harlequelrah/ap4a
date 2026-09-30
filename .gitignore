@@ -1,0 +1,16 @@
+# Dossiers de compilation génériques
+build/
+build*/
+bin/
+out/
+
+# Fichiers générés par CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Fichiers d'IDE courants
+.vscode/
+.idea/
+*.user
