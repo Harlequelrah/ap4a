@@ -10,11 +10,13 @@ public:
     Scheduler &operator=(const Scheduler &other);
     ~Scheduler();
     void simulate();
-    void addSensor(Sensor* sensor);
+    void addSensor(Sensor *sensor);
 
 private:
     std::vector<Sensor *> sensors;
     std::chrono::seconds elapsedTime;
+    std::chrono::steady_clock::time_point startTime;
+    std::chrono::seconds::rep lastProcessedSecond;
 };
 
 #endif

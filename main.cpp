@@ -2,6 +2,7 @@
 #include "Server.hpp"
 #include "Sensor.hpp"
 #include "Scheduler.hpp"
+#include <thread>
 int main()
 {
     Server server;
@@ -11,9 +12,10 @@ int main()
     Sensor sensor2("Humidity", &server, std::chrono::seconds(5));
     scheduler.addSensor(&sensor1);
     scheduler.addSensor(&sensor2);
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 11; ++i)
     {
         scheduler.simulate();
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     return 0;
