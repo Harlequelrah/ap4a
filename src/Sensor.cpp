@@ -49,7 +49,8 @@ void Sensor::execute()
     value = std::rand() % 101;
     if (server != nullptr)
     {
-        server->consoleWriter(type, value);
+        server->consoleWrite(type, value);
+        server->fileWrite(type, value);
     }
 };
 

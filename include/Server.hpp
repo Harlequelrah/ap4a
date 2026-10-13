@@ -19,7 +19,7 @@ public:
     ~Server();
 
     // méthodes
-    void consoleWriter(const std::string &type, double value);
+    void consoleWrite(const std::string &type, double value);
     void fileWrite(const std::string &type, double value);
 
     friend std::ostream &operator<<(std::ostream& os ,const Server& server);

@@ -1,5 +1,25 @@
 #include <iostream>
+#include <fstream>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
+#include <filesystem>
+
 #include "Server.hpp"
+
+std::string getCurrentDateTime()
+{
+    auto now = std::chrono::system_clock::now();
+    std::time_t time = std::chrono::system_clock::to_time_t(now);
+
+    std::tm localTime = *std::localtime(&time);
+
+    std::ostringstream oss;
+    oss << std::put_time(&localTime, "%Y-%m-%d %H:%M:%S");
+
+    return oss.str();
+}
 
 Server::Server()
 {
@@ -22,16 +42,37 @@ Server::~Server()
 {
 }
 
-void Server::consoleWriter(const std::string &type, double value)
+void Server::consoleWrite(const std::string &type, double value)
 {
-    std::cout << type << " : " << value << std::endl;
+    std::cout << "[" << getCurrentDateTime() << "] "
+              << type << " : " << value << std::endl;
 }
 
 void Server::fileWrite(const std::string &type, double value)
 {
-    std::ofstream fichier("logs/" + type + ".txt");
-    fichier << type << " : " << value << std::endl;
-    fichier.close();
+    std::string filename = "logs/" + type + ".csv";
+
+    bool writeHeader =
+        !std::filesystem::exists(filename) ||
+        std::filesystem::file_size(filename) == 0;
+
+    std::ofstream fichier(filename, std::ios::app);
+
+    if (!fichier.is_open())
+    {
+        std::cerr << "Erreur : impossible d'ouvrir "
+                  << filename << std::endl;
+        return;
+    }
+
+    if (writeHeader)
+    {
+        fichier << "datetime,type,value\n";
+    }
+
+    fichier << getCurrentDateTime() << ','
+            << type << ','
+            << value << '\n';
 }
 
 std::ostream &operator<<(std::ostream &os, const Server &server)
