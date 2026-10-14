@@ -3,7 +3,7 @@ build/
 build*/
 bin/
 out/
-
+logs/
 # Fichiers générés par CMake
 CMakeCache.txt
 CMakeFiles/

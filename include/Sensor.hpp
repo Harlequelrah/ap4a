@@ -3,6 +3,8 @@
 #include "Server.hpp"
 #include <string>
 #include <chrono>
+
+// classe de base
 class Sensor
 {
 public:
@@ -10,8 +12,9 @@ public:
     Sensor(const std::string &type, Server *server, std::chrono::seconds interval);
     Sensor(const Sensor &other);
     Sensor &operator=(const Sensor &other);
-    ~Sensor();
-    void update();
+    // virtual ~Sensor();
+    virtual ~Sensor();
+    virtual void update();
     void execute();
     int getId() const;
     std::chrono::seconds getInterval() const;

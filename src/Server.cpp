@@ -45,7 +45,7 @@ Server::~Server()
 void Server::consoleWrite(const std::string &type, double value)
 {
     std::cout << "[" << getCurrentDateTime() << "] "
-              << type << " : " << value << std::endl;
+    << type << " : " << value << std::endl;
 }
 
 void Server::fileWrite(const std::string &type, double value)
