@@ -1,23 +1,29 @@
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include "Server.hpp"
 #include "Sensor.hpp"
+#include "TemperatureSensor.hpp"
+#include "HumiditySensor.hpp"
+#include "SoundSensor.hpp"
+#include "LightSensor.hpp"
 #include "Scheduler.hpp"
-#include <thread>
 int main()
 {
     Server server;
-    Scheduler scheduler;
-
-    Sensor sensor1("Temperature", &server, std::chrono::seconds(2));
-    Sensor sensor2("Humidity", &server, std::chrono::seconds(5));
-    scheduler.addSensor(&sensor1);
-    scheduler.addSensor(&sensor2);
-    for (int i = 0; i < 11; ++i)
+    Scheduler scheduler(std::chrono::seconds(1));
+    TemperatureSensor temperature(&server, std::chrono::seconds(2));
+    LightSensor light(&server, std::chrono::seconds(1));
+    SoundSensor sound(&server, std::chrono::seconds(2));
+    HumiditySensor humidity(&server, std::chrono::seconds(5));
+    scheduler.addSensor(&temperature);
+    scheduler.addSensor(&humidity);
+    scheduler.addSensor(&light);
+    scheduler.addSensor(&sound);
+    while (true)
     {
         scheduler.simulate();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
-    
 
     return 0;
 }

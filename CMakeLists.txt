@@ -10,6 +10,10 @@ add_executable(project
     src/Server.cpp
     src/Sensor.cpp
     src/Scheduler.cpp
+    src/TemperatureSensor.cpp
+    src/HumiditySensor.cpp
+    src/SoundSensor.cpp
+    src/LightSensor.cpp
 )
 
 target_include_directories(project

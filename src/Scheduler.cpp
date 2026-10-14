@@ -1,6 +1,8 @@
 #include "Scheduler.hpp"
+#include <thread>
 
-Scheduler::Scheduler() : elapsedTime(std::chrono::seconds(0)), startTime(std::chrono::steady_clock::now()), lastProcessedSecond(0) {};
+Scheduler::Scheduler() : elapsedTime(std::chrono::seconds(0)), startTime(std::chrono::steady_clock::now()), lastProcessedSecond(0), sleepInterval(std::chrono::seconds(1)) {};
+Scheduler::Scheduler(std::chrono::seconds sleepInterval) : elapsedTime(std::chrono::seconds(0)), startTime(std::chrono::steady_clock::now()), lastProcessedSecond(0), sleepInterval(sleepInterval) {};
 Scheduler::Scheduler(const Scheduler &other) : sensors(other.sensors), elapsedTime(0), startTime(std::chrono::steady_clock::now()) {};
 Scheduler &Scheduler::operator=(const Scheduler &other)
 {
@@ -32,6 +34,7 @@ void Scheduler::simulate()
             }
         }
     }
+    std::this_thread::sleep_for(sleepInterval);
 }
 void Scheduler::addSensor(Sensor *sensor)
 {
