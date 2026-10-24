@@ -20,7 +20,7 @@ Sensor::Sensor(const Sensor &other)
     : id(nextId++),
       type(other.type),
       server(other.server),
-      interval(interval) {};
+      interval(other.interval) {};
 
 Sensor &Sensor::operator=(const Sensor &other)
 {

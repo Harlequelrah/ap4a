@@ -11,6 +11,7 @@ Scheduler &Scheduler::operator=(const Scheduler &other)
         sensors = other.sensors;
         startTime = std::chrono::steady_clock::now();
         elapsedTime = std::chrono::seconds(0);
+        sleepInterval = other.sleepInterval;
         lastProcessedSecond = 0;
     }
     return *this;
@@ -22,7 +23,7 @@ void Scheduler::simulate()
     while (lastProcessedSecond < current_second)
     {
         ++lastProcessedSecond;
-        elapsedTime = std::chrono::seconds(current_second);
+        elapsedTime = std::chrono::seconds(lastProcessedSecond);
         for (Sensor *sensor : sensors)
         {
             auto interval = sensor->getInterval();
