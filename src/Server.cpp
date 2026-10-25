@@ -149,7 +149,7 @@ void Server::logAlert(const std::string &message)
     }
 
     const std::string datetime = getCurrentDateTime();
-    const std::string alert = "[" + datetime + "] " + message;
+    const std::string alert = "[" + datetime + "] - Alerte - " + message;
 
     std::cout << alert << std::endl;
     file << alert << '\n';
