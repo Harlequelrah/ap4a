@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include "Measurement.hpp"
 class Server
 {
 public:
@@ -19,10 +20,13 @@ public:
     ~Server();
 
     // méthodes
-    void consoleWrite(const std::string &type, double value);
-    void fileWrite(const std::string &type, double value);
+    void consoleWrite(const std::string &type,
+                      const Measurement &value);
 
-    friend std::ostream &operator<<(std::ostream& os ,const Server& server);
+    void fileWrite(const std::string &type,
+                   const Measurement &value);
+
+    friend std::ostream &operator<<(std::ostream &os, const Server &server);
 };
 
 #endif

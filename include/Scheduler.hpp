@@ -6,6 +6,7 @@ class Scheduler
 {
 public:
     Scheduler();
+    Scheduler(std::chrono::seconds sleepInterval);
     Scheduler(const Scheduler &other);
     Scheduler &operator=(const Scheduler &other);
     ~Scheduler();
@@ -15,8 +16,8 @@ public:
 private:
     std::vector<Sensor *> sensors;
     std::chrono::seconds elapsedTime;
+    std::chrono::seconds sleepInterval;
     std::chrono::steady_clock::time_point startTime;
-    std::chrono::seconds::rep lastProcessedSecond;
 };
 
 #endif

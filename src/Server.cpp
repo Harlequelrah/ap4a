@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <sstream>
 #include <filesystem>
-
+#include "Measurement.hpp"
 #include "Server.hpp"
 
 std::string getCurrentDateTime()
@@ -42,15 +42,21 @@ Server::~Server()
 {
 }
 
-void Server::consoleWrite(const std::string &type, double value)
+void Server::consoleWrite(const std::string &type,
+                          const Measurement &value)
 {
     std::cout << "[" << getCurrentDateTime() << "] "
-    << type << " : " << value << std::endl;
+              << type << " : "
+              << measurementToString(value)
+              << std::endl;
 }
 
-void Server::fileWrite(const std::string &type, double value)
+void Server::fileWrite(const std::string &type,
+                       const Measurement &value)
 {
     std::string filename = "logs/" + type + ".csv";
+
+    std::filesystem::create_directories("logs");
 
     bool writeHeader =
         !std::filesystem::exists(filename) ||
@@ -72,9 +78,8 @@ void Server::fileWrite(const std::string &type, double value)
 
     fichier << getCurrentDateTime() << ','
             << type << ','
-            << value << '\n';
+            << measurementToString(value) << '\n';
 }
-
 std::ostream &operator<<(std::ostream &os, const Server &server)
 {
     os << "Serveur";
