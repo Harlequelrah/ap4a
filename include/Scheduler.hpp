@@ -18,7 +18,6 @@ private:
     std::chrono::seconds elapsedTime;
     std::chrono::seconds sleepInterval;
     std::chrono::steady_clock::time_point startTime;
-    std::chrono::seconds::rep lastProcessedSecond;
 };
 
 #endif
