@@ -30,6 +30,7 @@ private:
 protected:
     // rend execute purement virtuel et Sensor devient une classe Abstraite
     virtual void execute() = 0;
-    void sendMeasurement(const Measurement &value);
+    void sendMeasurement();
+    Measurement lastMeasurement;
 };
 #endif

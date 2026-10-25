@@ -1,3 +1,4 @@
+#include <windows.h>
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -10,6 +11,8 @@
 #include "Scheduler.hpp"
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
     Server server;
     Scheduler scheduler(std::chrono::seconds(1));
     TemperatureSensor temperature(&server, std::chrono::seconds(2));

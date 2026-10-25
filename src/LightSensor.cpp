@@ -6,5 +6,6 @@ LightSensor::LightSensor(Server *server, std::chrono::seconds interval) : Sensor
 void LightSensor::execute()
 {
     bool value = std::rand() % 2;
-    sendMeasurement(value);
+    lastMeasurement = value;
+    sendMeasurement();
 }

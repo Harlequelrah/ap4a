@@ -6,7 +6,8 @@ HumiditySensor::HumiditySensor(Server *server, std::chrono::seconds interval) : 
 
 void HumiditySensor::execute()
 {
-    float value = std::rand() % 101;
+    float value = (std::rand() % 10001) / 100.0f;
+    lastMeasurement = value;
 
-    sendMeasurement(value);
+    sendMeasurement();
 }

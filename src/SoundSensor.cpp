@@ -6,5 +6,6 @@ SoundSensor::SoundSensor(Server *server, std::chrono::seconds interval) : Sensor
 void SoundSensor::execute()
 {
     int value = std::rand() % 101;
-    sendMeasurement(value);
+    lastMeasurement = value;
+    sendMeasurement();
 }

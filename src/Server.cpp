@@ -23,6 +23,7 @@ std::string getCurrentDateTime()
 
 Server::Server()
 {
+    std::filesystem::create_directories("logs");
 }
 
 Server::Server(const Server &other)
@@ -31,7 +32,6 @@ Server::Server(const Server &other)
 
 Server &Server::operator=(const Server &other)
 {
-    std::cout << "Operateur =" << std::endl;
     if (this != &other)
     {
     }
@@ -84,4 +84,73 @@ std::ostream &operator<<(std::ostream &os, const Server &server)
 {
     os << "Serveur";
     return os;
+}
+
+void Server::processMeasurement(const std::string &type,
+                                const Measurement &value)
+{
+    consoleWrite(type, value);
+    fileWrite(type, value);
+    analyzeMeasurement(type, value);
+}
+void Server::analyzeMeasurement(const std::string &type,
+                                const Measurement &value)
+{
+    if (type == "Temperature")
+    {
+        if (const float *temperature = std::get_if<float>(&value))
+        {
+            if (*temperature > 30.0f)
+            {
+                logAlert("Temperature elevee : " +
+                         measurementToString(value) + " °C");
+            }
+        }
+    }
+    else if (type == "Humidity")
+    {
+        if (const float *humidity = std::get_if<float>(&value))
+        {
+            if (*humidity > 70.0f)
+            {
+                logAlert("Humidite elevee : " +
+                         measurementToString(value) + " %");
+            }
+        }
+    }
+    else if (type == "Sound")
+    {
+        if (const int *sound = std::get_if<int>(&value))
+        {
+            if (*sound > 80)
+            {
+                logAlert("Niveau sonore eleve : " +
+                         measurementToString(value));
+            }
+        }
+    }
+    else if (type == "Light")
+    {
+        // Aucune règle d'alerte définie pour le moment.
+    }
+}
+
+void Server::logAlert(const std::string &message)
+{
+    const std::string filename = "logs/alerts.log";
+
+    std::ofstream file(filename, std::ios::app);
+
+    if (!file.is_open())
+    {
+        std::cerr << "Erreur : impossible d'ouvrir "
+                  << filename << std::endl;
+        return;
+    }
+
+    const std::string datetime = getCurrentDateTime();
+    const std::string alert = "[" + datetime + "] " + message;
+
+    std::cout << alert << std::endl;
+    file << alert << '\n';
 }

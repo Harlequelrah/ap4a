@@ -7,20 +7,19 @@ Sensor::Sensor()
     : id(nextId++),
       type("Unknown"),
       server(nullptr),
-      interval(std::chrono::seconds(1)) {};
+      interval(std::chrono::seconds(1)), lastMeasurement(0.0f) {};
 
 Sensor::Sensor(const std::string &type, Server *server, std::chrono::seconds interval)
     : id(nextId++),
       type(type),
       server(server),
-      interval(interval) {
-
+      interval(interval), lastMeasurement(0.0f) {
       };
 Sensor::Sensor(const Sensor &other)
     : id(nextId++),
       type(other.type),
       server(other.server),
-      interval(other.interval) {};
+      interval(other.interval), lastMeasurement(other.lastMeasurement) {};
 
 Sensor &Sensor::operator=(const Sensor &other)
 {
@@ -29,6 +28,7 @@ Sensor &Sensor::operator=(const Sensor &other)
         type = other.type;
         server = other.server;
         interval = other.interval;
+        lastMeasurement = other.lastMeasurement;
     }
     return *this;
 }
@@ -55,12 +55,11 @@ Server *Sensor::getServer() const
     return server;
 }
 
-void Sensor::sendMeasurement(const Measurement &value)
+void Sensor::sendMeasurement()
 {
     if (server != nullptr)
     {
-        server->consoleWrite(getType(), value);
-        server->fileWrite(getType(), value);
+        server->processMeasurement(getType(), lastMeasurement);
     }
 }
 const std::string &Sensor::getType() const

@@ -5,6 +5,8 @@ TemperatureSensor::TemperatureSensor(Server *server, std::chrono::seconds interv
 
 void TemperatureSensor::execute()
 {
-    float value = std::rand() % 101;
-    sendMeasurement(value);
+    // plage entre -25 et 50 dégré
+    float value = (std::rand() % 7501) / 100.0f - 25.0f;
+    lastMeasurement = value;
+    sendMeasurement();
 }
