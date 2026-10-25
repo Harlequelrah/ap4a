@@ -4,6 +4,7 @@ build*/
 bin/
 out/
 logs/
+docs/
 # Fichiers générés par CMake
 CMakeCache.txt
 CMakeFiles/

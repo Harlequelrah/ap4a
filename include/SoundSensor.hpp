@@ -6,7 +6,9 @@
 class SoundSensor : public Sensor
 {
 public:
+    // Construit un capteur sonore avec sa fréquence d'acquisition.
     SoundSensor(Server *server, std::chrono::seconds interval);
+    // Génère un niveau sonore entier entre 0 et 100.
     void execute() override;
 };
 
