@@ -8,6 +8,7 @@
 #include "Measurement.hpp"
 #include "Server.hpp"
 
+// Retourne la date et l'heure locales dans le format utilisé par les journaux.
 std::string getCurrentDateTime()
 {
     auto now = std::chrono::system_clock::now();
@@ -21,15 +22,18 @@ std::string getCurrentDateTime()
     return oss.str();
 }
 
+// Prépare le dossier de sortie dès la création du serveur.
 Server::Server()
 {
     std::filesystem::create_directories("logs");
 }
 
+// Le serveur ne possède pas d'état à recopier.
 Server::Server(const Server &other)
 {
 }
 
+// Le serveur ne possède pas d'état assignable.
 Server &Server::operator=(const Server &other)
 {
     if (this != &other)
@@ -38,10 +42,12 @@ Server &Server::operator=(const Server &other)
     return *this;
 }
 
+// Les fichiers sont fermés automatiquement par leurs flux locaux.
 Server::~Server()
 {
 }
 
+// Affiche une mesure avec son horodatage et sa valeur formatée.
 void Server::consoleWrite(const std::string &type,
                           const Measurement &value)
 {
@@ -51,13 +57,17 @@ void Server::consoleWrite(const std::string &type,
               << std::endl;
 }
 
+// Ajoute une mesure au fichier CSV correspondant à son type.
 void Server::fileWrite(const std::string &type,
                        const Measurement &value)
 {
+    // Chaque capteur écrit dans un fichier distinct : Temperature.csv, etc.
     std::string filename = "logs/" + type + ".csv";
 
+    // Garantit que le dossier existe même après une suppression manuelle.
     std::filesystem::create_directories("logs");
 
+    // L'en-tête est écrit uniquement lors de la création d'un fichier vide.
     bool writeHeader =
         !std::filesystem::exists(filename) ||
         std::filesystem::file_size(filename) == 0;
@@ -71,6 +81,7 @@ void Server::fileWrite(const std::string &type,
         return;
     }
 
+    // Le format reste compatible avec un tableur ou un outil d'analyse CSV.
     if (writeHeader)
     {
         fichier << "datetime,type,value\n";
@@ -80,12 +91,15 @@ void Server::fileWrite(const std::string &type,
             << type << ','
             << measurementToString(value) << '\n';
 }
+
+// Surcharge d'affichage minimale pour représenter le serveur dans un flux.
 std::ostream &operator<<(std::ostream &os, const Server &server)
 {
     os << "Serveur";
     return os;
 }
 
+// Pipeline central de traitement d'une mesure reçue d'un capteur.
 void Server::processMeasurement(const std::string &type,
                                 const Measurement &value)
 {
@@ -93,11 +107,14 @@ void Server::processMeasurement(const std::string &type,
     fileWrite(type, value);
     analyzeMeasurement(type, value);
 }
+
+// Vérifie les seuils métiers propres à chaque type de capteur.
 void Server::analyzeMeasurement(const std::string &type,
                                 const Measurement &value)
 {
     if (type == "Temperature")
     {
+        // Une température supérieure à 30 °C est considérée comme élevée.
         if (const float *temperature = std::get_if<float>(&value))
         {
             if (*temperature > 30.0f)
@@ -109,6 +126,7 @@ void Server::analyzeMeasurement(const std::string &type,
     }
     else if (type == "Humidity")
     {
+        // Une humidité supérieure à 70 % déclenche une alerte.
         if (const float *humidity = std::get_if<float>(&value))
         {
             if (*humidity > 70.0f)
@@ -120,6 +138,7 @@ void Server::analyzeMeasurement(const std::string &type,
     }
     else if (type == "Sound")
     {
+        // Un niveau sonore supérieur à 80 déclenche une alerte.
         if (const int *sound = std::get_if<int>(&value))
         {
             if (*sound > 80)
@@ -131,10 +150,11 @@ void Server::analyzeMeasurement(const std::string &type,
     }
     else if (type == "Light")
     {
-        // Aucune règle d'alerte définie pour le moment.
+        // Aucune règle d'alerte n'est définie pour la lumière pour le moment.
     }
 }
 
+// Ecrit une alerte dans la console et dans le journal permanent.
 void Server::logAlert(const std::string &message)
 {
     const std::string filename = "logs/alerts.log";
@@ -148,6 +168,7 @@ void Server::logAlert(const std::string &message)
         return;
     }
 
+    // Le même message horodaté est envoyé aux deux sorties.
     const std::string datetime = getCurrentDateTime();
     const std::string alert = "[" + datetime + "] - Alerte - " + message;
 
